@@ -48,13 +48,17 @@ class MaxSparseNetAgent():
         self.A = make_dic(cfg.NUM_Y, cfg.NUM_X)
 
         train_dataset = UniformSparseDataset(self.A, cfg.SPARSITY, 600000, mode='train')
-        self.train_loader = DataLoader(dataset=train_dataset, batch_size=train_batch_size,
-                                       shuffle=False, num_workers=1,
-                                       worker_init_fn=lambda _: np.random.seed())
+        self.train_loader = DataLoader(
+            dataset=train_dataset, batch_size=train_batch_size,
+            shuffle=False, num_workers=8,
+            worker_init_fn=lambda _: np.random.seed(torch.initial_seed() % 2**32)
+        )
         valid_dataset = UniformSparseDataset(self.A, cfg.SPARSITY, 100000, mode='valid')
-        self.valid_loader = DataLoader(dataset=valid_dataset, batch_size=train_batch_size,
-                                       shuffle=False, num_workers=1,
-                                       worker_init_fn=lambda _: np.random.seed())
+        self.valid_loader = DataLoader(
+            dataset=valid_dataset, batch_size=train_batch_size,
+            shuffle=False, num_workers=1,
+            worker_init_fn=lambda _: np.random.seed(torch.initial_seed() % 2**32)
+        )
 
     def train(self):
         num_epochs = 150
