@@ -103,7 +103,7 @@ class MaxSparseNetAgent():
             self.optim.step()
 
             # Metrics
-            s_acc = eval_s_acc(s_pred, s_gt, self.cfg.SPARSITY)
+            s_acc = eval_s_acc(s_pred, s_gt)
             l_acc = eval_l_acc(s_pred, s_gt, self.cfg.NUM_Y)
 
             batch_size = x.shape[0]
@@ -138,7 +138,7 @@ class MaxSparseNetAgent():
                 s_pred = self.net(y)
 
                 # Metrics
-                s_acc = eval_s_acc(s_pred, s_gt, self.cfg.SPARSITY)
+                s_acc = eval_s_acc(s_pred, s_gt)
                 l_acc = eval_l_acc(s_pred, s_gt, self.cfg.NUM_Y)
 
                 batch_size = x.shape[0]

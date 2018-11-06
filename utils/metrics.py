@@ -26,18 +26,18 @@ class AverageMeter:
         return self.avg
 
 
-def eval_s_acc(x_pred, x_gt, sparsity):
+def eval_s_acc(x_pred, x_gt):
     '''
     Strict Accuracy
-    Batch x N 형태로 들어온다고 가정
+    x_pred: Batch x N, float, high value means high probabilities.
+    x_gt: Batch x N, float
     '''
-    topk_vals = x_pred.topk(sparsity, dim=1)[0]
-    kth_vals = topk_vals[:, -1:]
+    x_pred_masked = x_pred.clone()
+    x_pred_masked[x_gt == 0] = float('inf')
 
-    x_pred_strict = torch.zeros_like(x_pred)
-    x_pred_strict[x_pred >= kth_vals] = 1
+    min_vals = x_pred_masked.min(dim=1, keepdim=True)[0]
 
-    correct = (x_pred_strict == x_gt).all(dim=1).float()
+    correct = ((x_pred >= min_vals) == (x_gt != 0)).all(dim=1).float()
 
     return correct.mean()
 
@@ -45,7 +45,8 @@ def eval_s_acc(x_pred, x_gt, sparsity):
 def eval_l_acc(x_pred, x_gt, n_measure):
     '''
     Loose Accuracy
-    Batch x N 형태로 들어온다고 가정
+    x_pred: Batch x N, float, high value means high probabilities.
+    x_gt: Batch x N, float
     '''
     topk_vals = x_pred.topk(n_measure, dim=1)[0]
     kth_vals = topk_vals[:, -1:]
