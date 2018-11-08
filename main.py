@@ -2,6 +2,16 @@ import argparse
 
 from agents.max_sparse_net import MaxSparseNetAgent
 
+import torch
+import numpy as np
+import random
+
+torch.manual_seed(10)
+torch.backends.cudnn.deterministic = True
+torch.backends.cudnn.benchmark = False
+np.random.seed(10)
+random.seed(10)
+
 
 def train(cfg):
     agent = MaxSparseNetAgent(cfg)
