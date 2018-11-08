@@ -10,19 +10,16 @@ class ResBlock(nn.Module):
             nn.BatchNorm1d(n_in),
             nn.ReLU(inplace=True),
             nn.Linear(n_in, n_out),
-            # nn.BatchNorm1d(n_out),
+            nn.BatchNorm1d(n_out),
         )
 
         if n_in == n_out:
             self.shortcut = (lambda x: x)  # skip connection
         else:
-            self.shortcut = nn.Linear(n_in, n_out)  # upsample
-            '''
             self.shortcut = nn.Sequential(
                 nn.Linear(n_in, n_out),
                 nn.BatchNorm1d(n_out),
             )
-            '''
 
     def forward(self, x):
         x = self.block(x) + self.shortcut(x)
