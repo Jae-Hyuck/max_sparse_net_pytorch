@@ -37,11 +37,13 @@ class MaxSparseNetAgent():
         self.net = MaxSparseNet(cfg).to(self.device)
 
         # Optimizer
-        # self.optim = torch.optim.Adam(self.net.parameters(), lr=cfg.LR)
+        self.optim = torch.optim.Adam(self.net.parameters(), lr=cfg.LR)
         # self.optim = torch.optim.RMSprop(self.net.parameters(), lr=cfg.LR)
+        '''
         self.optim = torch.optim.SGD(self.net.parameters(), lr=cfg.LR,
                                      momentum=0.9, weight_decay=0.0001)
-        self.scheduler = torch.optim.lr_scheduler.StepLR(self.optim, step_size=50, gamma=0.1)
+        '''
+        self.scheduler = torch.optim.lr_scheduler.StepLR(self.optim, step_size=50, gamma=0.5)
 
         # Prepare dataset
         # np.random.seed(910103)

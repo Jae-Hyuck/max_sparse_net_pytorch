@@ -7,10 +7,10 @@ class ResBlock(nn.Module):
         super(ResBlock, self).__init__()
         self.block = nn.Sequential(
             nn.Linear(n_in, n_in),
-            nn.BatchNorm1d(n_in),
+            nn.BatchNorm1d(n_in, track_running_stats=False),
             nn.ReLU(inplace=True),
             nn.Linear(n_in, n_out),
-            nn.BatchNorm1d(n_out),
+            nn.BatchNorm1d(n_out, track_running_stats=False),
         )
 
         if n_in == n_out:
@@ -18,7 +18,7 @@ class ResBlock(nn.Module):
         else:
             self.shortcut = nn.Sequential(
                 nn.Linear(n_in, n_out),
-                nn.BatchNorm1d(n_out),
+                nn.BatchNorm1d(n_out, track_running_stats=False),
             )
 
     def forward(self, x):
@@ -37,7 +37,7 @@ class MaxSparseNet(nn.Module):
 
         self.net = nn.Sequential(
             nn.Linear(n_in, n_in),
-            nn.BatchNorm1d(n_in, n_in),
+            nn.BatchNorm1d(n_in, n_in, track_running_stats=False),
             ResBlock(n_in, n_in),
             ResBlock(n_in, n_in),
             ResBlock(n_in, n_in),
@@ -55,8 +55,8 @@ class MaxSparseNet(nn.Module):
         for m in self.modules():
             if isinstance(m, nn.Linear):
                 # nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
-                # nn.init.xavier_normal_(m.weight)
-                nn.init.kaiming_normal_(m.weight, nonlinearity='relu')
+                nn.init.xavier_normal_(m.weight)
+                # nn.init.kaiming_normal_(m.weight, nonlinearity='relu')
             elif isinstance(m, nn.BatchNorm1d):
                 nn.init.constant_(m.weight, 1)
                 nn.init.constant_(m.bias, 0)
