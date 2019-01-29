@@ -38,6 +38,7 @@ class MaxSparseNet(nn.Module):
         self.net = nn.Sequential(
             nn.Linear(n_in, n_in),
             nn.BatchNorm1d(n_in, n_in, track_running_stats=False),
+            nn.ReLU(inplace=True),  # # #
             ResBlock(n_in, n_in),
             ResBlock(n_in, n_in),
             ResBlock(n_in, n_in),

@@ -93,11 +93,13 @@ class MaxSparseNetAgent():
             s_pred = self.net(y)
 
             # Compute loss
-            # cur_loss = F.binary_cross_entropy_with_logits(shat, s_gt)
+            cur_loss = F.binary_cross_entropy_with_logits(s_pred, s_gt)
+            '''
             cur_loss = F.log_softmax(s_pred, dim=1)
             cur_loss = cur_loss * s_gt
             cur_loss = - cur_loss.sum(dim=1)
             cur_loss = cur_loss.mean()
+            '''
 
             # Backprop and optimize
             self.optim.zero_grad()
